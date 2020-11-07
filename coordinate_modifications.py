@@ -2,6 +2,15 @@ import math
 
 
 def get_coordinates_from_file(file_name):
+    '''Get coordinate data from file.
+
+    Args:
+        file_name (str): path/filename.ext
+
+    Returns:
+        orginal_coordinates (list): 2D Array of all coordinates
+        origin (list): 2D Array with len 1 of origin
+    '''
     handle_name = open(file_name)
     original_coordinates = []
     origin = []
@@ -20,6 +29,15 @@ def get_coordinates_from_file(file_name):
 
 
 def scale_coordinates(coordinate_array, scale):
+    '''Scale a coordinate by a factor x
+
+    Args:
+        coordinate_array (list): 2D Array of coordinates
+        scale (int): scaling factor
+
+    Returns:
+        new_coordinate_array (list): 2D Array of scaled coordinates
+    '''
     new_coordinate_array = []
     for coordinate in coordinate_array:
         x, y = coordinate
@@ -30,6 +48,15 @@ def scale_coordinates(coordinate_array, scale):
 
 
 def polar_to_cartesian(coordinate, origin):
+    '''Convert a polar coordinate to cartesian
+
+    Args:
+        coordinate (list): 2D Array of a single coordinate in polar form
+        origin (list): 2D Array of a single origin coordinate
+
+    Returns:
+        cartesian_coordinate (list): 2D Array of cartesian coordinate
+    '''
     cartesian_coordinate = []
     radius = coordinate[0]
     theta = coordinate[1]
@@ -42,6 +69,15 @@ def polar_to_cartesian(coordinate, origin):
 
 
 def cartesian_to_polar(coordinate, origin):
+    '''Convert a cartesian coordinate to polar
+
+    Args:
+        coordinate (list): 2D Array of a single coordinate
+        origin (list): 2D Array of a single origin coordinate
+
+    Returns:
+        polar_coordinate (list): 2D Array of polar coordinate
+    '''
     polar_coordinate = []
     a = abs(coordinate[0] - origin[0])
     b = abs(coordinate[1] - origin[1])
@@ -64,6 +100,16 @@ def cartesian_to_polar(coordinate, origin):
 
 
 def rotate_coordinates(coordinate_array, origin, degrees):
+    '''Rotate coordinates from the origin by x degrees
+
+    Args:
+        coordinate_array (list): 2D Array of coordinates
+        origin (list): 2D Array of a single origin coordinate
+        degrees (int): Angle of rotation
+
+    Returns:
+        new_coordinate_array (list): 2D Array of scaled coordinates
+    '''
     new_coordinate_array = []
     for coordinate in coordinate_array:
         polar_coord = cartesian_to_polar(coordinate, origin)
@@ -74,12 +120,33 @@ def rotate_coordinates(coordinate_array, origin, degrees):
 
 
 def rotate_and_scale_coordinates(coordinate_array, origin, degrees, scale):
+    '''Scale and Rotate coordinates from the origin by x degrees by y scaling factor
+
+    Args:
+        coordinate_array (list): 2D Array of coordinates
+        origin (list): 2D Array of a single origin coordinate
+        degrees (int): Angle of rotation
+        scale (int): Scaling factor
+
+    Returns:
+        new_coordinate_array (list): 2D Array of scaled and rotated coordinates
+    '''
     scaled_coordinates = scale_coordinates(coordinate_array, scale)
     new_coordinate_array = rotate_coordinates(scaled_coordinates, origin, degrees)
     return new_coordinate_array
 
 
 def create_new_file(scaled, rotated, rotated_and_scaled):
+    '''Write coordinates to a file
+
+    Args:
+        scaled (list): 2D Array of scaled coordinates
+        rotated (list): 2D Array of rotated coordinates
+        rotated_and_scaled (list): 2D Array of rotated and scaled coordinates
+
+    Returns:
+        None
+    '''
     handle_name = open("./original_coordinates.csv")
     handle_name2 = open("./modified_coordinates.csv", 'w')
     for_loop = 0
@@ -118,16 +185,13 @@ def create_new_file(scaled, rotated, rotated_and_scaled):
 
 
 def main():
+    '''Main'''
     original_coordinates, origin = get_coordinates_from_file("./original_coordinates.csv")
     scale = eval(input("Enter a number you would like the coordinates to be scaled by: "))
     degrees = eval(input("Enter the how many degrees you would like the coordinates to be rotated by: "))
     scaled_coordinates = scale_coordinates(original_coordinates, scale)
     rotated_coordinates = rotate_coordinates(original_coordinates, origin, degrees)
     rotated_and_scaled_coordinates = rotate_and_scale_coordinates(original_coordinates, origin, degrees, scale)
-    '''print(original_coordinates)
-    print(scaled_coordinates)
-    print(rotated_coordinates)
-    print(rotated_and_scaled_coordinates)'''
     create_new_file(scaled_coordinates, rotated_coordinates, rotated_and_scaled_coordinates)
 
 
